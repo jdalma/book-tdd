@@ -1,8 +1,9 @@
-package tdd.models;
+package tdd;
 
 import java.util.Objects;
+import java.util.StringJoiner;
 
-public class Money {
+public class Money implements Expression{
     private final int amount;
     private final String currency;
 
@@ -33,8 +34,19 @@ public class Money {
         return Objects.hash(amount, currency);
     }
 
-    Money plus(Money money){
-        return new Money(amount + money.amount , currency);
+    @Override
+    public Expression plus(Expression addend){
+        return new Sum(this , addend);
+    }
+
+    @Override
+    public Money reduce(Bank bank , String to){
+        int rate = bank.rate(currency , to);
+        return new Money(amount / rate , to);
+    }
+
+    public Expression times(int multiplier){
+        return new Money(this.amount * multiplier , currency);
     }
 
     public int getAmount() {
@@ -43,5 +55,13 @@ public class Money {
 
     public String getCurrency() {
         return currency;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Money.class.getSimpleName() + "[", "]")
+                .add("amount=" + amount)
+                .add("currency='" + currency + "'")
+                .toString();
     }
 }
