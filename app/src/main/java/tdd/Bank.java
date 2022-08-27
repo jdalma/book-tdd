@@ -3,7 +3,7 @@ package tdd;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bank {
+public class Bank{
 
     private Map<Pair , Integer> rates = new HashMap<>();
 
